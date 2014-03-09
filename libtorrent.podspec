@@ -15,7 +15,7 @@ to be very easy to use
   s.screenshots  = 
   s.license      = 'BSD'
   s.author       = { "waTeim" => "truthset@gmail.com" }
-  s.source       = { :git => "https://github.com/waTeim/libtorrent.git", :tag => s.version.to_s }
+  s.source       = { :git => "https://github.com/waTeim/libtorrent.git" , :tag => s.version.to_s }
 
   s.platform     = :osx, '10.6'
   s.requires_arc = false
