@@ -19,7 +19,7 @@ to be very easy to use
   s.platform     = :osx, '10.6'
   s.requires_arc = false
   s.vendored_libraries = 'lib/*.a'
-  s.preserve_paths = s.public_header_files = 
+  s.preserve_paths =
      'include/**/*.{h,hpp}',
      'include/**/**/*.{h,hpp}'
   s.header_mappings_dir = 'include'
