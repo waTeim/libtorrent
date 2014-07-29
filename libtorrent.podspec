@@ -13,7 +13,7 @@ to be very easy to use
                    DESC
   s.homepage     = "http://libtorrent.com/"
   s.screenshots  = 
-  s.license      = { :type => "BSD" , :file => "LICENSE.txt" }
+  s.license      = { :type => 'BSD' , :file => 'LICENSE' }
   s.author       = { "waTeim" => "truthset@gmail.com" }
   s.source       = { :git => "https://github.com/waTeim/libtorrent.git" , :tag => s.version.to_s }
 
