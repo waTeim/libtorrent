@@ -11,9 +11,8 @@ to be cpu efficient
 to be memory efficient
 to be very easy to use
                    DESC
+  s.license      = { :type => 'BOOST' , :file => 'LICENSE' }
   s.homepage     = "http://libtorrent.com/"
-  s.screenshots  = 
-  s.license      = { :type => 'BSD' , :file => 'LICENSE' }
   s.author       = { "waTeim" => "truthset@gmail.com" }
   s.source       = { :git => "https://github.com/waTeim/libtorrent.git" , :tag => s.version.to_s }
 
