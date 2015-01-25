@@ -180,7 +180,9 @@ namespace libtorrent {
 		// in the alert. It can be used to determine the run-time type of an alert* in
 		// order to cast to that alert type and access specific members.
 		// 
-		// e.g::
+		// e.g:
+		//
+		// .. code:: c++
 		//
 		//	std::auto_ptr<alert> a = ses.pop_alert();
 		//	switch (a->type())
@@ -233,6 +235,7 @@ namespace libtorrent {
 		ptime m_timestamp;
 	};
 
+#ifndef BOOST_NO_EXCEPTIONS
 #ifndef TORRENT_NO_DEPRECATE
 	struct TORRENT_EXPORT unhandled_alert : std::exception
 	{
@@ -291,6 +294,7 @@ namespace libtorrent {
 
 #endif // BOOST_NO_TYPEID
 #endif // TORRENT_NO_DEPRECATE
+#endif // BOOST_NO_EXCEPTIONS
 
 // When you get an alert, you can use ``alert_cast<>`` to attempt to cast the pointer to a
 // more specific alert type, in order to query it for more information.

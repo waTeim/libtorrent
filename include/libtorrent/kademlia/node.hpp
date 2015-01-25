@@ -201,7 +201,6 @@ public:
 	virtual ~node_impl() {}
 
 	void tick();
-	void refresh(node_id const& id, find_data::nodes_callback const& f);
 	void bootstrap(std::vector<udp::endpoint> const& nodes
 		, find_data::nodes_callback const& f);
 	void add_router_node(udp::endpoint router);
@@ -221,7 +220,7 @@ public:
 
 	node_id const& nid() const { return m_id; }
 
-	boost::tuple<int, int> size() const{ return m_table.size(); }
+	boost::tuple<int, int, int> size() const { return m_table.size(); }
 	size_type num_global_nodes() const
 	{ return m_table.num_global_nodes(); }
 
@@ -279,7 +278,9 @@ public:
 
 protected:
 
-	void lookup_peers(sha1_hash const& info_hash, int prefix, entry& reply
+	void send_single_refresh(udp::endpoint const& ep, int bucket
+		, node_id const& id = node_id());
+	void lookup_peers(sha1_hash const& info_hash, entry& reply
 		, bool noseed, bool scrape) const;
 	bool lookup_torrents(sha1_hash const& target, entry& reply
 		, char* tags) const;
@@ -310,6 +311,10 @@ private:
 	dht_mutable_table_t m_mutable_table;
 	
 	ptime m_last_tracker_tick;
+
+	// the last time we issued a bootstrap or a refresh on our own ID, to expand
+	// the routing table buckets close to us.
+	ptime m_last_self_refresh;
 
 	// secret random numbers used to create write tokens
 	int m_secret[2];

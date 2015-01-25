@@ -82,7 +82,7 @@ POSSIBILITY OF SUCH DAMAGE.
 // ``std::map``, i.e. in RAM. It's not necessarily very useful in practice, but
 // illustrates the basics of implementing a custom storage.
 //
-//::
+// .. code:: c++
 //
 //	struct temp_storage : storage_interface
 //	{
@@ -433,6 +433,7 @@ namespace libtorrent
 		// hidden
 		~default_storage();
 
+		// hidden
 		void set_file_priority(std::vector<boost::uint8_t> const& prio);
 #ifndef TORRENT_NO_DEPRECATE
 		void finalize_file(int file);

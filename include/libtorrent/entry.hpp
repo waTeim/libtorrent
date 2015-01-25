@@ -83,6 +83,7 @@ namespace libtorrent
 	// of the entry object.
 	struct TORRENT_EXPORT type_error: std::runtime_error
 	{
+		// internal
 		type_error(const char* error): std::runtime_error(error) {}
 	};
 
@@ -160,7 +161,9 @@ namespace libtorrent
 		// have.
 		// 
 		// The typical code to get info from a torrent file will then look like
-		// this::
+		// this:
+		//
+		// .. code:: c++
 		// 
 		// 	entry torrent_file;
 		// 	// ...
@@ -176,7 +179,9 @@ namespace libtorrent
 		// 	}
 		// 
 		// 
-		// The following code is equivalent, but a little bit shorter::
+		// The following code is equivalent, but a little bit shorter:
+		//
+		// .. code:: c++
 		// 
 		// 	entry torrent_file;
 		// 	// ...

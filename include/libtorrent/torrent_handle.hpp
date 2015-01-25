@@ -656,7 +656,9 @@ namespace libtorrent
 		// download as well as when closing down.
 		// 
 		// Example code to pause and save resume data for all torrents and wait
-		// for the alerts::
+		// for the alerts:
+		// 
+		// .. code:: c++
 		// 
 		//	extern int outstanding_resume_data; // global counter of outstanding resume data
 		//	std::vector<torrent_handle> handles = ses.get_torrents();
@@ -1144,11 +1146,13 @@ namespace libtorrent
 #endif // TORRENT_USE_WSTRING
 #endif // TORRENT_NO_DEPRECATE
 
-		// Enables or disabled super seeding/initial seeding for this torrent. The torrent
-		// needs to be a seed for this to take effect.
+		// Enables or disabled super seeding/initial seeding for this torrent.
+		// The torrent needs to be a seed for this to take effect.
 		void super_seeding(bool on) const;
 
-		// ``info_hash()`` returns the info-hash for the torrent.
+		// ``info_hash()`` returns the info-hash of the torrent. If this handle
+		// is to a torrent that hasn't loaded yet (for instance by being added)
+		// by a URL, the returned value is undefined.
 		sha1_hash info_hash() const;
 
 		// comparison operators. The order of the torrents is unspecified

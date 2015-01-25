@@ -61,18 +61,6 @@ POSSIBILITY OF SUCH DAMAGE.
 	build, to automatically apply these defines
 #endif
 
-// some parts pulled out of stdint.h
-// to avoid C99 or C++11 dependency
-#if !defined INT64_MAX
-#define INT64_MAX 0x7fffffffffffffffLL
-#endif
-#if !defined INT16_MAX
-#define INT16_MAX 32767
-#endif
-#if !defined INT16_MIN
-#define INT16_MIN -32768
-#endif
-
 #ifndef _MSC_VER
 #ifndef __STDC_FORMAT_MACROS
 #define __STDC_FORMAT_MACROS 1
@@ -286,7 +274,13 @@ POSSIBILITY OF SUCH DAMAGE.
 #define TORRENT_USE_READV 0
 
 #else
-#warning unknown OS, assuming BSD
+
+#ifdef _MSC_VER
+#pragma message ( "unknown OS, assuming BSD" )
+#else
+#warning "unknown OS, assuming BSD"
+#endif
+
 #define TORRENT_BSD
 #endif
 
@@ -315,7 +309,12 @@ POSSIBILITY OF SUCH DAMAGE.
 // this is the maximum number of characters in a
 // path element / filename on windows
 #define TORRENT_MAX_PATH 255
-#warning unknown platform, assuming the longest path is 255
+
+#ifdef _MSC_VER
+#pragma message ( "unknown platform, assuming the longest path is 255" )
+#else
+#warning "unknown platform, assuming the longest path is 255"
+#endif
 
 #endif
 
@@ -562,10 +561,12 @@ int snprintf(char* buf, int len, char const* fmt, ...)
 #ifdef BOOST_NO_EXCEPTIONS
 #define TORRENT_TRY if (true)
 #define TORRENT_CATCH(x) else if (false)
+#define TORRENT_CATCH_ALL else if (false)
 #define TORRENT_DECLARE_DUMMY(x, y) x y
 #else
 #define TORRENT_TRY try
 #define TORRENT_CATCH(x) catch(x)
+#define TORRENT_CATCH_ALL catch(...)
 #define TORRENT_DECLARE_DUMMY(x, y)
 #endif // BOOST_NO_EXCEPTIONS
 

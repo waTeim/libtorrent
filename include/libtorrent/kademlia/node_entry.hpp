@@ -37,6 +37,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "libtorrent/socket.hpp"
 #include "libtorrent/address.hpp"
 #include "libtorrent/union_endpoint.hpp"
+#include "libtorrent/time.hpp" // for time_now()
 
 #ifdef TORRENT_DHT_VERBOSE_LOGGING
 #include "libtorrent/time.hpp"
@@ -47,9 +48,12 @@ namespace libtorrent { namespace dht
 
 struct node_entry
 {
-	node_entry(node_id const& id_, udp::endpoint ep, int roundtriptime = 0xffff, bool pinged = false)
-		: id(id_)
-		, endpoint(ep)
+	node_entry(node_id const& id_, udp::endpoint ep, int roundtriptime = 0xffff
+		, bool pinged = false)
+		: last_queried(pinged ? time_now() : min_time())
+		, id(id_)
+		, a(ep.address().to_v4().to_bytes())
+		, p(ep.port())
 		, rtt(roundtriptime & 0xffff)
 		, timeout_count(pinged ? 0 : 0xff)
 	{
@@ -59,8 +63,10 @@ struct node_entry
 	}
 
 	node_entry(udp::endpoint ep)
-		: id(0)
-		, endpoint(ep)
+		: last_queried(min_time())
+		, id(0)
+		, a(ep.address().to_v4().to_bytes())
+		, p(ep.port())
 		, rtt(0xffff)
 		, timeout_count(0xff)
 	{
@@ -70,7 +76,9 @@ struct node_entry
 	}
 
 	node_entry()
-		: id(0)
+		: last_queried(min_time())
+		, id(0)
+		, p(0)
 		, rtt(0xffff)
 		, timeout_count(0xff)
 	{
@@ -84,23 +92,30 @@ struct node_entry
 	void timed_out() { if (pinged() && timeout_count < 0xfe) ++timeout_count; }
 	int fail_count() const { return pinged() ? timeout_count : 0; }
 	void reset_fail_count() { if (pinged()) timeout_count = 0; }
-	udp::endpoint ep() const { return udp::endpoint(endpoint); }
+	udp::endpoint ep() const { return udp::endpoint(address_v4(a), p); }
 	bool confirmed() const { return timeout_count == 0; }
 	void update_rtt(int new_rtt)
 	{
+		TORRENT_ASSERT(new_rtt <= 0xffff);
+		TORRENT_ASSERT(new_rtt >= 0);
+		if (new_rtt == 0xffff) return;
 		if (rtt == 0xffff) rtt = new_rtt;
-		else rtt = int(rtt) / 3 + int(new_rtt) * 2 / 3;
+		else rtt = int(rtt) * 2 / 3 + int(new_rtt) / 3;
 	}
-	address addr() const { return endpoint.address(); }
-	int port() const { return endpoint.port; }
+	address addr() const { return address_v4(a); }
+	int port() const { return p; }
 
 #ifdef TORRENT_DHT_VERBOSE_LOGGING
 	ptime first_seen;
 #endif
 
+	// the time we last received a response for a request to this peer
+	ptime last_queried;
+
 	node_id id;
 
-	union_endpoint endpoint;
+	address_v4::bytes_type a;
+	boost::uint16_t p;
 
 	// the average RTT of this node
 	boost::uint16_t rtt;
