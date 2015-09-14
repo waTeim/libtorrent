@@ -1288,7 +1288,7 @@ namespace libtorrent
 		int alert_queue_size;
 
 		// the maximum allowed size (in bytes) to be received
-		// by the metadata extension, i.e. magnet links. It defaults to 1 MiB.
+		// by the metadata extension, i.e. magnet links. It defaults to 3 MiB.
 		int max_metadata_size;
 
 		// true by default, which means the number of connection attempts per
@@ -1426,7 +1426,7 @@ namespace libtorrent
 			, enforce_node_id(false)
 			, ignore_dark_internet(true)
 		{}
-		
+
 		// the maximum number of peers to send in a reply to ``get_peers``
 		int max_peers_reply;
 
@@ -1434,13 +1434,13 @@ namespace libtorrent
 		// announcing and refreshing the routing table. This parameter is called
 		// alpha in the kademlia paper
 		int search_branching;
-		
+
 #ifndef TORRENT_NO_DEPRECATE
 		// the listen port for the dht. This is a UDP port. zero means use the
 		// same as the tcp interface
 		int service_port;
 #endif
-		
+
 		// the maximum number of failed tries to contact a node before it is
 		// removed from the routing table. If there are known working nodes that
 		// are ready to replace a failing node, it will be replaced immediately,

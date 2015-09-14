@@ -153,18 +153,21 @@ namespace libtorrent
 	{
 	public:
 
-		// If the fingerprint in the first overload is omited, the client will
-		// get a default fingerprint stating the version of libtorrent. The
+		// If the fingerprint in the first overload is omited, the client will get
+		// a default fingerprint stating the version of libtorrent. The
 		// fingerprint is a short string that will be used in the peer-id to
 		// identify the client and the client's version. For more details see the
-		// fingerprint class. The constructor that only takes a fingerprint will
-		// not open a listen port for the session, to get it running you'll have
-		// to call ``session::listen_on()``. The other constructor, that takes a
-		// port range and an interface as well as the fingerprint will
-		// automatically try to listen on a port on the given interface. For more
-		// information about the parameters, see ``listen_on()`` function.
+		// fingerprint class. The first overload (that takes a fingerprint, flags
+		// and alert_mask) will listen on INADDR_ANY and let the OS pick a listen
+		// port. To listen on a specific interface or specific port, you'll have
+		// to call ``session::listen_on()``.
 		// 
-		// The flags paramater can be used to start default features (upnp &
+		// The second overload, that takes a port range and an interface as well
+		// as the fingerprint will automatically try to listen on a port on the
+		// given interface. For more information about the parameters, see
+		// ``listen_on()`` function.
+		// 
+		// The flags parameter can be used to start default features (upnp &
 		// nat-pmp) and default plugins (ut_metadata, ut_pex and smart_ban). The
 		// default is to start those things. If you do not want them to start,
 		// pass 0 as the flags parameter.
@@ -200,7 +203,7 @@ namespace libtorrent
 #endif
 			start(flags);
 		}
-			
+
 		// The destructor of session will notify all trackers that our torrents
 		// have been shut down. If some trackers are down, they will time out.
 		// All this before the destructor of session returns. So, it's advised
@@ -484,10 +487,13 @@ namespace libtorrent
 		// ``is_dht_running()`` returns true if the DHT support has been started
 		// and false
 		// otherwise.
+		// 
+		// ``get_dht_settings()`` returns the current settings
 		void start_dht();
 		void stop_dht();
 		void set_dht_settings(dht_settings const& settings);
 		bool is_dht_running() const;
+		dht_settings get_dht_settings() const;
 
 		// ``add_dht_node`` takes a host name and port pair. That endpoint will be
 		// pinged, and if a valid DHT reply is received, the node will be added to
@@ -1020,7 +1026,7 @@ namespace libtorrent
 		// until ``stop_upnp()`` is called. See upnp-and-nat-pmp_.
 		// 
 		// It is off by default.
- 		void start_upnp();
+		void start_upnp();
 		void stop_upnp();
 
 		// protocols used by add_port_mapping()
@@ -1045,7 +1051,7 @@ namespace libtorrent
 		// It is off by default.
 		void start_natpmp();
 		void stop_natpmp();
-		
+
 	private:
 
 		void init(std::pair<int, int> listen_range, char const* listen_interface
